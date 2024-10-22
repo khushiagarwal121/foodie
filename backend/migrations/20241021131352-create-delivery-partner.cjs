@@ -45,7 +45,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "users", // Assuming created_by references users
+          model: "users",
           key: "uuid",
         },
       },
@@ -53,7 +53,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
-          model: "users", // Assuming updated_by references users
+          model: "users",
           key: "uuid",
         },
       },

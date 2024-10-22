@@ -18,23 +18,20 @@ module.exports = {
         allowNull: false,
       },
       license_expiry_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
       vehicle_number: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       vehicle_type: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       document_type: {
-        type: Sequelize.STRING, // Flexible string type
+        type: Sequelize.ENUM("PAN Number", "Aadhar Number"),
         allowNull: false,
-        validate: {
-          isIn: [["PAN Number", "Aadhar Card"]], // Enum-like validation
-        },
       },
       document_number: {
         type: Sequelize.STRING,
@@ -42,7 +39,7 @@ module.exports = {
       },
       document_image: {
         type: Sequelize.UUID,
-        allowNull: false, // Store file paths or UUIDs to the document images
+        allowNull: false,
       },
       created_by: {
         type: Sequelize.UUID,

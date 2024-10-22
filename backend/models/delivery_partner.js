@@ -66,7 +66,6 @@ export default (sequelize) => {
       },
       created_by: {
         type: DataTypes.UUID,
-        allowNull: false,
         references: {
           model: "users",
           key: "uuid",
@@ -80,16 +79,9 @@ export default (sequelize) => {
           key: "uuid",
         },
       },
-      // restaurant_document_uuid: {
-      //   type: DataTypes.UUID,
-      //   references: {
-      //     model: "restaurant_documents",
-      //     key: "uuid",
-      //   },
-      // },
+
       updated_by: {
         type: DataTypes.UUID,
-        allowNull: true,
         references: {
           model: "users",
           key: "uuid",
@@ -98,7 +90,7 @@ export default (sequelize) => {
     },
     {
       sequelize, // Pass the Sequelize instance
-      modelName: "DeliveryPartner",
+      modelName: "DeliveryPartner", //Name of the model
       tableName: "delivery_partners", // Name of the table in the database
       timestamps: true, // Automatically handle created_at and updated_at
       paranoid: true, // Enable soft deletes

@@ -11,6 +11,12 @@ module.exports = {
       fssai_number: {
         type: Sequelize.STRING(14),
         allowNull: false,
+        validate: {
+          len: {
+            args: [14, 14], // Ensure it's exactly 14 characters long
+            msg: "FSSAI number must be 14 characters long",
+          },
+        },
       },
       fssai_valid_from: {
         type: Sequelize.DATEONLY,
@@ -20,7 +26,7 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: false,
       },
-      fssai_certificate: {
+      fssai_certificate_image: {
         type: Sequelize.UUID,
         allowNull: false,
       },
@@ -40,16 +46,16 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
-          model: "users", // Name of the Restaurant table
-          key: "uuid", // Primary key in the Restaurant table
+          model: "users",
+          key: "uuid",
         },
       },
       updated_by: {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
-          model: "users", // Name of the Restaurant table
-          key: "uuid", // Primary key in the Restaurant table
+          model: "users",
+          key: "uuid",
         },
       },
       created_at: {

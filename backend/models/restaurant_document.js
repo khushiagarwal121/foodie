@@ -4,10 +4,7 @@ export default (sequelize) => {
   class RestaurantDocument extends Model {
     static associate(models) {
       // Define associations
-      // Adding associations for created_by and updated_by
-      RestaurantDocument.belongsTo(models.Restaurant, {
-        foreignKey: "restaurant_document_uuid",
-      });
+
       RestaurantDocument.belongsTo(models.User, {
         foreignKey: "created_by", // Foreign key for the creator
         as: "creator", // Alias for the creator
@@ -32,6 +29,12 @@ export default (sequelize) => {
       fssai_number: {
         type: DataTypes.STRING(14), // FSSAI number has 14 digits
         allowNull: false,
+        validate: {
+          len: {
+            args: [14, 14], // Ensure it's exactly 14 characters long
+            msg: "FSSAI number must be 14 characters long",
+          },
+        },
       },
       fssai_valid_from: {
         type: DataTypes.DATEONLY, // Only date required
@@ -41,7 +44,7 @@ export default (sequelize) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      fssai_certificate: {
+      fssai_certificate_image: {
         type: DataTypes.UUID,
         allowNull: false,
       },
