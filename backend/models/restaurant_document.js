@@ -1,6 +1,6 @@
 import { Model } from "sequelize"; // Import Model and DataTypes from sequelize
 
-export default (sequelize) => {
+export default (sequelize, DataTypes) => {
   class RestaurantDocument extends Model {
     static associate(models) {
       // Define associations
