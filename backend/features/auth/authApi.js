@@ -1,11 +1,28 @@
 import express from "express";
-import authController from "./authController.js";
+import { login, logout, refreshAccessToken } from "./authController.js";
+import {
+  loginSchema,
+  logoutSchema,
+  refreshAccessTokenSchema,
+} from "./authSchema.js";
+import {
+  validateRequest,
+  checkRefreshToken,
+} from "../../middlewares/validationMiddleware.js";
 
 const router = express.Router();
 
-router.route("/auth/login").post(authController.login);
-router.route("/auth/logout").post(authController.logout);
-router.route("/auth/refresh-token").post(authController.refreshToken);
+router.route("/login").post(validateRequest(loginSchema), login);
+router
+  .route("/logout")
+  .post(checkRefreshToken, validateRequest(logoutSchema), logout);
+router
+  .route("/refresh-token")
+  .post(
+    checkRefreshToken,
+    validateRequest(refreshAccessTokenSchema),
+    refreshAccessToken
+  );
 
 // Use export default for ES6 module syntax
 export default router;

@@ -2,22 +2,23 @@ import {
   loginUser,
   logoutUser,
   generateAccessAndRefreshTokens,
+  refreshAccessToken,
 } from "./authService";
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    // Validate user credentials and generate tokens
-    const user = await loginUser(email, password); // Assuming loginUser returns user info
+    // Extract email and password from request body
+    const { email, password, currentRoleName } = req.body;
+    // Call loginUser to get user info and role IDs
+    const { user, roleNames } = await loginUser(email, password);
 
     // Generate access and refresh tokens
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       user,
-      roleIds
+      currentRoleName
     );
 
-    console.log("Generated tokens:", { accessToken, refreshToken });
+    console.log("Generated tokens: ", { accessToken, refreshToken });
 
     // Set options for cookies
     const options = {
@@ -33,6 +34,9 @@ const login = async (req, res) => {
       .cookie("refreshToken", refreshToken, options)
       .json({
         message: "Logged in successfully",
+        user,
+        roleNames, //array of roles associated with user names
+        currentRoleName, //optional
       });
   } catch (error) {
     console.error("Login error:", error);
@@ -41,9 +45,8 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken; // Get refresh token from cookie
-
   try {
+    const refreshToken = req.cookies.refreshToken; // Get refresh token from cookie
     await logoutUser(refreshToken); // Call the service to invalidate the token
 
     // Optionally, clear the cookie on the client side
@@ -58,9 +61,13 @@ const logout = async (req, res) => {
 };
 
 // Refresh token function in the controller
-const refreshToken = async (req, res) => {
+const refreshAccessToken = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken; // Retrieve refresh token from cookie
+    // should we also include req.body
+    // const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+
+    // const { refreshToken } = req.body;
 
     // Call the service function to handle token refreshing
     const newAccessToken = await refreshAccessToken(refreshToken);
@@ -78,4 +85,4 @@ const refreshToken = async (req, res) => {
   }
 };
 
-export { login, logout, refreshToken };
+export { login, logout, refreshAccessToken };

@@ -34,9 +34,9 @@ const loginUser = async (email, encodedPassword) => {
   }
 
   // Extract the role UUIDs from the associated roles
-  const roleIds = user.Roles.map((role) => role.uuid);
+  const roleNames = user.Roles.map((role) => role.uuid);
 
-  return { user, roleIds }; // Return user info and role IDs for token generation
+  return { user, roleNames }; // Return user info and role IDs for token generation
 };
 
 // Function to handle user logout
@@ -50,12 +50,12 @@ const logoutUser = async (refreshToken) => {
 };
 
 // Function to generate access token (short-lived)
-const generateAccessToken = (user, roleIds) => {
+const generateAccessToken = (user, currentRoleName) => {
   return jwt.sign(
     {
       // Include both userId and roleIds in the token payload
       userId: user.uuid,
-      roleIds,
+      currentRoleName,
     },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN }
@@ -63,12 +63,13 @@ const generateAccessToken = (user, roleIds) => {
 };
 
 // Function to generate refresh token (long-lived)
-const generateRefreshToken = async (user, roleIds) => {
+const generateRefreshToken = async (user, currentRoleName) => {
   const refreshToken = jwt.sign(
     {
       // Include both userId and roleIds in the token payload
       userId: user.uuid,
-      roleIds,
+      // roleIds, //roll name
+      currentRoleName, //name
     },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "7d" }
@@ -78,17 +79,18 @@ const generateRefreshToken = async (user, roleIds) => {
   return refreshToken;
 };
 // Function to generate both access and refresh tokens
-const generateAccessAndRefreshTokens = async (user, roleIds) => {
-  const accessToken = generateAccessToken(user, roleIds);
-  const refreshToken = await generateRefreshToken(user, roleIds);
+const generateAccessAndRefreshTokens = async (user, currentRoleName) => {
+  const accessToken = generateAccessToken(user, currentRoleName);
+  const refreshToken = await generateRefreshToken(user, currentRoleName);
 
   return { accessToken, refreshToken };
 };
+
+const refreshAccessToken = async () => {};
 // Exporting all functions at the end
 export {
   loginUser,
   logoutUser,
-  generateAccessToken,
-  generateRefreshToken,
+  refreshAccessToken,
   generateAccessAndRefreshTokens,
 };

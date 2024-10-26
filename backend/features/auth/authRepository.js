@@ -7,7 +7,9 @@ const findUserByEmail = async (email) => {
 };
 
 const saveRefreshToken = async (userUuid, token) => {
-  const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // Set expiration to 7 days
+  const expirationDuration = process.env.REFRESH_TOKEN_EXPIRES_IN || "7d";
+  const days = parseInt(expirationDuration);
+  const expirationDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000); // Set expiration to 7 days
   return RefreshToken.create({
     user_uuid: userUuid,
     token,
@@ -22,8 +24,4 @@ const deleteRefreshToken = async (refreshToken) => {
 };
 
 // Export repository functions
-module.exports = {
-  findUserByEmail,
-  saveRefreshToken,
-  deleteRefreshToken,
-};
+export { findUserByEmail, saveRefreshToken, deleteRefreshToken };
