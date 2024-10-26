@@ -17,7 +17,7 @@ const loginUser = async (email, encodedPassword) => {
       {
         model: authRepository.Role, // This is your Role model
         as: "Roles", // Use the alias defined in the association
-        attributes: ["uuid"], // Only fetch the UUID of each role
+        attributes: ["uuid","name"], // Only fetch the UUID of each role
       },
     ],
   });
@@ -34,7 +34,7 @@ const loginUser = async (email, encodedPassword) => {
   }
 
   // Extract the role UUIDs from the associated roles
-  const roleNames = user.Roles.map((role) => role.uuid);
+  const roleNames = user.Roles.map((role) => role.name);
 
   return { user, roleNames }; // Return user info and role IDs for token generation
 };
@@ -86,7 +86,33 @@ const generateAccessAndRefreshTokens = async (user, currentRoleName) => {
   return { accessToken, refreshToken };
 };
 
-const refreshAccessToken = async () => {};
+// Function to refresh access token
+const refreshAccessToken = async (refreshToken) => {
+  // Check if the refresh token is valid
+  if (!refreshToken) {
+    throw new Error("No refresh token provided");
+  }
+
+  // Verify the refresh token
+  let decoded;
+  try {
+    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  } catch (err) {
+    throw new Error("Invalid refresh token");
+  }
+
+  // Find the user by ID
+  const user = await findUserById(decoded.userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Generate a new access token
+  const roleNames = user.Roles.map((role) => role.name); // Assuming you have role names available
+  const newAccessToken = generateAccessToken(user, roleNames);
+
+  return newAccessToken;
+};
 // Exporting all functions at the end
 export {
   loginUser,
