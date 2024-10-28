@@ -17,7 +17,7 @@ const loginUser = async (email, encodedPassword) => {
       {
         model: authRepository.Role, // This is your Role model
         as: "Roles", // Use the alias defined in the association
-        attributes: ["uuid","name"], // Only fetch the UUID of each role
+        attributes: ["uuid", "name"], // Only fetch the UUID of each role
       },
     ],
   });
@@ -118,5 +118,6 @@ export {
   loginUser,
   logoutUser,
   refreshAccessToken,
+  generateAccessToken,
   generateAccessAndRefreshTokens,
 };

@@ -16,20 +16,23 @@ const validateRequest = (schema) => (req, res, next) => {
   // validation success
   next();
 };
-const checkRefreshToken = (req, res, next) => {
-  // Extract refresh token from cookies
-  const refreshToken = req.cookies.refreshToken;
+// const checkRefreshToken = (req, res, next) => {
+//   // Extract refresh token from cookies
+//   const refreshToken = req.cookies.refreshToken;
 
-  // Check if refresh token is missing
-  if (!refreshToken) {
-    return respondError(res, {
-      statusCode: 401,
-      message: "Refresh token not found. Please log in.",
-    });
-  }
+//   // Check if refresh token is missing
+//   if (!refreshToken) {
+//     return respondError(res, {
+//       statusCode: 401,
+//       message: "Refresh token not found. Please log in.",
+//     });
+//   }
 
-  // Proceed to the next middleware if validation passes
-  next();
+//   // Proceed to the next middleware if validation passes
+//   next();
+// };
+
+export {
+  validateRequest,
+  // , checkRefreshToken
 };
-
-export { validateRequest, checkRefreshToken };

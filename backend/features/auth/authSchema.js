@@ -20,8 +20,12 @@ const logoutSchema = Joi.object({}).strict().required().messages({
 });
 
 // Schema for refreshing the token - ensures the request body is empty
-const refreshAccessTokenSchema = Joi.object({}).strict().required().messages({
-  "object.base": "Request body must be empty.", // Custom message for empty object
-});
+// const refreshAccessTokenSchema = Joi.object({}).strict().required().messages({
+//   "object.base": "Request body must be empty.", // Custom message for empty object
+// });
 // in case of ivalid token also we should get logged out or even if its empty
-export { loginSchema, logoutSchema, refreshAccessTokenSchema };
+export {
+  loginSchema,
+  logoutSchema,
+  // refreshAccessTokenSchema
+};

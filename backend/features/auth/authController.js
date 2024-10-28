@@ -61,28 +61,28 @@ const logout = async (req, res) => {
 };
 
 // Refresh token function in the controller
-const refreshAccessToken = async (req, res) => {
-  try {
-    const refreshToken = req.cookies.refreshToken; // Retrieve refresh token from cookie
-    // should we also include req.body
-    // const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+// const refreshAccessToken = async (req, res) => {
+//   try {
+//     const refreshToken = req.cookies.refreshToken; // Retrieve refresh token from cookie
+//     // should we also include req.body
+//     // const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
-    // const { refreshToken } = req.body;
+//     // const { refreshToken } = req.body;
 
-    // Call the service function to handle token refreshing
-    const newAccessToken = await refreshAccessToken(refreshToken);
+//     // Call the service function to handle token refreshing
+//     const newAccessToken = await refreshAccessToken(refreshToken);
 
-    if (!newAccessToken) {
-      return res
-        .status(403)
-        .json({ message: "Invalid or expired refresh token" });
-    }
+//     if (!newAccessToken) {
+//       return res
+//         .status(403)
+//         .json({ message: "Invalid or expired refresh token" });
+//     }
 
-    // Send the new access token back to the client
-    return res.status(200).json({ accessToken: newAccessToken });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
-  }
-};
+//     // Send the new access token back to the client
+//     return res.status(200).json({ accessToken: newAccessToken });
+//   } catch (error) {
+//     return res.status(500).json({ message: "Internal server error", error });
+//   }
+// };
 
 export { login, logout, refreshAccessToken };
